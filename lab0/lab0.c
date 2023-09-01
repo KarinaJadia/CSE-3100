@@ -1,5 +1,3 @@
-#include <stdio.h> 
-
 int main(void) { 
     printf("Hello, World!\n");
 
@@ -10,7 +8,7 @@ int main(void) {
         a += 2;
     }
 
-    printf("total: %d\n", total);
+    printf("%d", total);
 
     return 0;
 }

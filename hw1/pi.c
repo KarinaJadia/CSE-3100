@@ -13,12 +13,6 @@ int main()
 	//add code below 
 	
 
-
-
-
-
-
-
 	printf("PI = %.10f\n", pi);
 	return 0;
 }

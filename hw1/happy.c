@@ -20,7 +20,6 @@ int main()
         
         n = n1 * n1 + n2 * n2 + n3 * n3;
         printf("%d\n",n);
-        debug += 1;
     }
 
 	if(n==1) printf("%d is a happy number.\n", m);

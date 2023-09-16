@@ -1,4 +1,4 @@
-//#include <stdio.h>
+// #include <stdio.h>
 
 /* This function calculates n-th Catalan number.
  * n is assumed to be non-negative.

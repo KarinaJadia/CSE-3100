@@ -12,8 +12,9 @@
 
 void one_particle(int *grid, int n) {
     int random;
-    int x = 0, y = 0, z = 0; // tracks starting positions
-    for(int i = 0; i < n; i++) {
+    int x = 0, y = 0, z = 0; // tracks positions
+
+    for(int i = 0; i < n; i++) { // loop simulates movement n times
         random = rand() % 6;
 
         if(random == 0) x--;
@@ -28,10 +29,9 @@ void one_particle(int *grid, int n) {
     y = y + ((2*n+1)/2);
     x = x + ((2*n+1)/2);
 
-    int idx = 0;
-    x=x*(2*n+1)*(2*n+1);
-    y*=(2*n+1);
-    idx=x+y+z;
+    x = x * (2*n+1) * (2*n+1);
+    y = y * (2*n+1);
+    int idx = x + y + z;
     grid[idx]+=1;
 }
 

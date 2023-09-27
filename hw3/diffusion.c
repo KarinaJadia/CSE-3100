@@ -1,6 +1,6 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 
 void one_particle(int *grid, int n) { // calculates the position of one particle after n moves and updates
 // its final position on the grid
@@ -37,8 +37,8 @@ void one_particle(int *grid, int n) { // calculates the position of one particle
     grid[pos] += 1; // updates grid to say that that position has been visited one (more) time
 }
 
-double density(int *grid, int n, double r) { // returns the proportion of particles in the grid
-// that are within the sphere of rn radius from the origin
+double density(int *grid, int n, double r) { // returns the proportion of particles in the grid that are
+// within the sphere of rn radius from the origin
 
     int x = 0, y = 0, z = 0; // initializes positions
     int index; // stores current index in grid
@@ -66,7 +66,7 @@ double density(int *grid, int n, double r) { // returns the proportion of partic
         c2 += grid[i]; // add particle(s) in that location
         x = 0; y = 0; z = 0; // resets positions
     }
-    
+
     return c1/c2; // returns proportion of particles in sphere to total
 }
 
@@ -79,20 +79,13 @@ void print_result(int *grid, int n)
     }
 }
 
-//TODO
-//Finish the following function
-//See the assignment decription on Piazza for more details
-void diffusion(int n, int m)
-{
-	//fill in a few line of code below
-    int * grid = calloc((2*n+1)*(2*n+1)*(2*n+1),sizeof(int)); // my code
+void diffusion(int n, int m) { // allocates memory to make grid, makes grid, prints grid, and then frees
+// memory allocation
 
-	for(int i = 1; i<=m; i++) one_particle(grid, n);
-
-	print_result(grid, n);
-
-	//fill in some code below
-    free(grid); // my code
+    int * grid = calloc((2*n+1)*(2*n+1)*(2*n+1),sizeof(int)); // added, allocates memory for proper-sized grid
+	for(int i = 1; i<=m; i++) one_particle(grid, n); // simulates movement of m particles
+	print_result(grid, n); // peepee poopoo
+    free(grid); // added, frees memory
 }
 
 int main(int argc, char *argv[]) {

@@ -2,21 +2,19 @@
 //#include <stdlib.h>
 //#include <assert.h>
 
-//TODO
-//Implement the below function
-//Simulate one particle moving n steps in random directions
-//Use a random number generator to decide which way to go at every step
-//When the particle stops at a final location, use the memory pointed to by grid to 
-//record the number of particles that stop at this final location
-//Feel free to declare, implement and use other functions when needed
+void one_particle(int *grid, int n) { // calculates the position of one particle after n moves and updates
+// its final position on the grid
 
-void one_particle(int *grid, int n) {
     int random;
     int x = 0, y = 0, z = 0; // tracks positions
+    int gs = 2*n+1; // dimension spans from -n to n so total number of possible positions along the grid
+    // is (2*n+1) so that's the grid size
 
-    for(int i = 0; i < n; i++) { // loop simulates movement n times
+    // loop simulates movement n times
+    for(int i = 0; i < n; i++) {
         random = rand() % 6;
 
+        // moves it in the direction based on whatever the direction is
         if(random == 0) x--;
         else if(random == 1) x++;
         else if(random == 2) y++;
@@ -25,52 +23,51 @@ void one_particle(int *grid, int n) {
         else if(random == 5) z--;
     }
 
-    z = z + ((2*n+1)/2);
-    y = y + ((2*n+1)/2);
-    x = x + ((2*n+1)/2);
+    // adding it to grid size divided by 2 to make sure that the coordinates are adjusted to map correctly
+    // to the middle of the grid
+    z = z + (gs/2);
+    y = y + (gs/2);
+    x = x + (gs/2);
 
-    x = x * (2*n+1) * (2*n+1);
-    y = y * (2*n+1);
-    int idx = x + y + z;
-    grid[idx]+=1;
+    // doing so to adjust the 3D measurements so it can be compressed into a 1D measurement
+    x = x * gs * gs;
+    y = y * gs;
+
+    int pos = x + y + z; // the value of the final calculated position of the particle
+    grid[pos] += 1; // updates grid to say that that position has been visited one (more) time
 }
 
-//TODO
-//Implement the following function
-//This function returns the fraction of particles that lie within the distance
-//r*n from the origin (including particles exactly r*n away)
-//The distance used here is Euclidean distance
-//Note: you will not have access to math.h when submitting on Mimir
-double density(int *grid, int n, double r) {
-    int x = 0, y = 0, z = 0; // tracks starting positions
-    int index;
-    double c1 = 0, c2 = 0; // counters
-    for(int i = 0; i < (2*n+1) * (2*n+1) * (2*n+1); i++) {
-        index=i;
-        while(index - ((2*n+1) * (2*n+1)) >= 0) {
-            x++;
-            index -= (2*n+1) * (2*n+1);
-        }
-        while(index - (2*n+1) >= 0) {
-            y++;
-            index-=(2*n+1);
-        }
-        while(index - 1 >= 0) {
-            z++;
-            index -= 1;
-        }
-        x-=n;
-        y-=n;
-        z-=n;
+double density(int *grid, int n, double r) { // returns the proportion of particles in the grid
+// that are within the sphere of rn radius from the origin
+
+    int x = 0, y = 0, z = 0; // initializes positions
+    int index; // stores current index in grid
+    double c1 = 0, c2 = 0; // counters for particles in sphere and particles total
+    int gs = 2*n+1; // i refuse to keep typing it out
+
+    // goes over every position in grid
+    for(int i = 0; i < gs * gs * gs; i++) {
+        index = i;
+
+        // calculates x, y, and z coordinates based on current index
+        while(index - (gs * gs) >= 0) { x++; index -= gs * gs; }
+        while(index - gs >= 0) {y++; index -= gs; }
+        while(index - 1 >= 0) { z++; index -= 1; }
+
+        // adjusts x, y, and z to correctly map in grid
+        x -= n;
+        y -= n;
+        z -= n;
+
+        // in order to avoid square rooting, i squared the other side
         if (abs(x) * abs(x) + abs(y) * abs(y) + abs(z) * abs(z) <= (r*n) * (r*n)) {
-            c1 += grid[i];
+            c1 += grid[i]; // if particle in sphere, add particle(s) in that location
         }
-        c2 += grid[i];
-        x = 0;
-        y = 0;
-        z = 0;
+        c2 += grid[i]; // add particle(s) in that location
+        x = 0; y = 0; z = 0; // resets positions
     }
-    return c1/c2;
+    
+    return c1/c2; // returns proportion of particles in sphere to total
 }
 
 //use this function to print results

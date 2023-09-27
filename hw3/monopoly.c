@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <assert.h>
 
 //There will be m players in an array
 typedef struct Player 
@@ -33,7 +33,7 @@ int transaction(TPlayer *p1, TPlayer *p2, int amount) { // transfers money from 
 
 int one_round(int m, int n, TPlayer p[], TProperty prop[]) {
 	for(int i = 0; i < m; i++) {
-		int steps = rand() % 6 + 1 + rand() % 6 + 1;
+		int step = rand() % 6 + 1 + rand() % 6 + 1;
 		
         // im too tired to add comments, its 1am and i have two back to back exams tomorrow so i cant do this
         // later i hope you understand and please dont fail me
@@ -43,10 +43,10 @@ int one_round(int m, int n, TPlayer p[], TProperty prop[]) {
             p[i].loc -= n;
         } else p[i].loc = step + p[i].loc;
 
-        if (currentProperty->owner_id == -1) {
-            currentProperty->owner_id = i;
-        } else if (!transaction(&p[i], &p[currentProperty->owner_id], currentProperty->rent)) {
-            return 0; // Transaction failed, end the round
+        if(prop[p[i].loc].owner_id == -1) prop[p[i].loc].owner_id = i;
+        else {
+            if(transaction(&p[i],&p[prop[p[i].loc].owner_id],prop[p[i].loc].rent)) continue;
+            else return 0;
         }
     }
 

@@ -1,6 +1,6 @@
 //#include <stdio.h>
 //#include <stdlib.h>
-//#include <assert.h>
+//#include <assert.h>6
 
 void one_particle(int *grid, int n) { // calculates the position of one particle after n moves and updates
 // its final position on the grid

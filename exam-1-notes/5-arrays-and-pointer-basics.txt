@@ -1,0 +1,22 @@
+array - can only store one type of variable (int or string or)
+initializations:
+int y[5] = {1,2,3,4,5} // initializes an array with a list
+int z[] = {1,2,3,4,5} // number of elements is optional if all elements are listed
+int a[5] = {1,2} // rest of elements are set to zero
+int b[5] = {1,2,[4]=5} // initializes as 1,2,0,0,5
+
+unlike primitive data types (int, float, double, long, char), when you pass an array it passes a reference
+to the original array, so changing an array from main() in a function will permanently change that array
+
+pointer - reference to a memory that stores a value
+& gets the addresses and * uses the address
+example {
+    int x = 10;
+    int y = 5;
+    int* px; // declare a pointer to some place in memory
+    px = &x; gets the address where x is stored
+    *px = 20; // at that address, changes the value to 20
+} // lecture 5 slide 47 has the chart
+
+basically, when you set px = x, you set it to a value like 1020
+when you set *px = x, you set the address (1020) to that value 

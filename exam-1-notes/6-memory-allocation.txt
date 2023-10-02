@@ -1,0 +1,35 @@
+memory location chart: lecture 4 slide 44
+lowest to highest: executable code, statics and globals, heap (grows up), grey space (up for grabs), stack is
+at the top going down
+
+static/global pool:
+    - where all constants (including string literals), global variables, and static variables are held
+    - allocated when the program starts
+    - deallocated when the program ends
+stack:
+    - where memory comes from for local variables in functions
+    - allocated automatically when entering function
+    - deallocated when leaving the function
+    - default stack size using gcc is 2 MB
+heap:
+    - where memory comes from for manual "on-the-fly" allocations
+    - allocated and deallocated manually by programmer
+    - alive as long as they are not freed
+
+malloc(int) return a generic pointer (void*) to a memory block of n bytes on the heat and null if unsuccessful
+more information on lecture 6 slide 12
+
+number of elements in array = sizeof(arr)/sizeof(arr[0])
+
+calloc does malloc but initializes all content to zero:
+    int* a = calloc(3 * sizeof(int)); // a[0] = 0
+realloc reallocates:
+    char* p malloc(100);
+    p = realloc(p, 200); // p has to be a pointer returned by a previous alloc function to work
+
+after done with memory, call free(pointer) and set pointer to null
+    - if you don't free, memory leaks and the program will run out of memory
+    - if freed twice, can corrupt and crash heap or the program could keep running and corrupt your data and
+    write it to the disc
+
+example of 2D array pointer in lecture 6 slide 40

@@ -1,0 +1,21 @@
+how to declare -
+int FuncName(int param) {
+    blah blah blah;
+    return an int;
+}
+void FuncName(void) { // if void isn't declared, compiler assumes int
+    blah blah blah;
+}
+
+for int main() you do have to return zero
+
+
+declaration/prototype of function:
+int Func(int); // declaration
+int main() {
+    func(1); // note that you can call the function here and it will work
+    return 0;
+}
+int Func(int x) { // even if the function is below where it was called
+    return x;
+}

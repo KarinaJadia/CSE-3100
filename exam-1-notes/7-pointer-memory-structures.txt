@@ -1,0 +1,28 @@
+when we declare an array with arr[], it comes from the stack which is a fixed size
+heap is larger and not a fixed size and used when we call malloc
+however stack is quicker to access so easier for smaller data
+
+if *p = p+1, it doesn't go to the next address byte, but the next value (slide 17 for better explanation)
+slide 22 for array initializations
+
+pointer vs array: visualization chart on slide 24
+
+structure syntax:
+    struct Person{ // structure declaration
+        int age;
+        char gender;
+    };
+    int main () {
+        struct Person p; // structure variable definition
+
+        p.age = 44; // accessing fields
+        p.gender = 'M';
+
+        struct Person q = {44, 'M'}; // variable definition and initialization 
+        return 0;
+    }
+structures are passed by value so if you tried to change gender in a function, it wouldn't actually change
+it in main
+
+array of structure example: slide 34
+typedef: slide 35; allows you to define and rename type abbreviation

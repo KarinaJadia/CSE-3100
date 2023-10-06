@@ -1,0 +1,28 @@
+how to pass data with a structure: slide 8
+to make a linked list: slide 12
+
+arrays vs linked lists:
+    array is a fixed size, resizing is expensive
+    linked lists are dynamic size
+
+    array memory allocated in advance, linked list memory allocated dynamically
+    array has fast sequential access, linked list has slow sequential access
+
+enum example: // enum is useful for keeping track of values on lists
+    typedef enum {
+        Red, Orange, Yellow, Green // assigns indexes to these values (starting with 0)
+    } Color;
+    void main() {
+        Color c1 = Red; // c1 = 0
+        Color c2 = Yellow; // c2 = 2
+        int c3 = c1 + c2; // c3 = 2
+    }
+purpose of enum is to make code more readable
+
+adding const (changing int* b to int* const b) means b can't be changed but the value it points to can be
+updated (slide 29)
+
+int func(); // function returning integer
+int* func(); // function returning pointer to integer
+int (*func)(); // pointer to function returning integer
+int* (*func)(); // pointer to function returning pointer to int

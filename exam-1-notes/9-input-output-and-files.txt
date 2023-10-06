@@ -1,0 +1,5 @@
+some good multiple choice answers on slide 8
+how to implement error messages: slide 18
+oening and closing files: slides 24 and 25
+file reading example: slide 31
+byte sized reading examples: begin slide 32

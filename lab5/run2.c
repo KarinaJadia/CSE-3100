@@ -15,7 +15,7 @@ int main(int argc, char ** argv)
         fprintf(stderr, "Usage: %s cmd1 cmd1_arg cmd2 [cmd2_args ..]\n", argv[0]);
         return 1;
     }
-
+    
     if ((child = fork()) == -1) {
         perror("fork()");
         exit(1);

@@ -60,18 +60,14 @@ int in_dict(const char *word) {
 //len is the length of the encrypted message
 //Note the encrypted message is stored as an array of integers (not chars)
 //The result is in decrypted
-void decryption(unsigned char key, unsigned char shift, const int *encrypted, int len, char *decrypted) {
-    int dec_index = 0;
-    for (int i = 0; i < len; i++){ // loops through message
-        int dc = (encrypted[i] ^ key) >> shift; // xors the key with the encrypted character and then shifts it by shift
-        if (dc < 32 || dc > 126) { // if it's not printable
-            dc = ' ';
-        }
-        decrypted[dec_index++] = (char)dc;
-    }
-    decrypted[len] = '\0';
-    //printf("PRONT decy message: %s\n", decrypted);
-} 
+
+void decryption(unsigned char key, unsigned char shift, const int *encrypted, int len, char *decrypted)
+{
+
+
+
+
+}
 
 //TODO
 //calculate a score for a message msg

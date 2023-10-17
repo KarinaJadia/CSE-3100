@@ -61,11 +61,9 @@ int in_dict(const char *word) {
 //Note the encrypted message is stored as an array of integers (not chars)
 //The result is in decrypted
 
-void decryption(unsigned char key, unsigned char shift, const int *encrypted, int len, char *decrypted)
-{
-
-
-
+void decryption(unsigned char key, unsigned char shift, const int *encrypted, int len, char *decrypted) {
+    for(int i = 0; i<(len); i++) decrypted[i] = (encrypted[i] ^ key) >> shift;
+	decrypted[len] = '\0';
 
 }
 
@@ -74,23 +72,15 @@ void decryption(unsigned char key, unsigned char shift, const int *encrypted, in
 //the score is used to determine whether msg is the original message
 int message_score(const char *msg) {
     int score = 0;
-    int i = 0;
-    while (msg[i] != '\0') {
-        int wordStart = i;
-        while (msg[i] != ' ' && msg[i] != '\0') {
-            i++;
-        }
-        int wordEnd = i;
-        char word[MAX_WORD_LENGTH]; // stores current word
-        if (wordEnd > wordStart) {
-            strncpy(word, msg + wordStart, wordEnd - wordStart); // extract word
-            word[wordEnd - wordStart] = '\0';
-
-            if (in_dict(word)) score++; // check if in dictionary
-        }
-        if (msg[i] == ' ') i++; // move to next word
+    char temp[MAX];
+    strcpy(temp, msg);
+    //printf("PRONT temp: %s\n", temp);
+    char *word = strtok(temp, " ");
+    //printf("PRONT word: %s\n", word);
+    while (word != NULL) {
+        if (in_dict(word)) score++;
+        word = strtok(NULL, " ");
     }
-    //printf("PRONT score: %d\n", score);
     return score;
 }
 
@@ -123,12 +113,12 @@ void search(const int *encrypted, int len, char *message)
 //read the encrypted message from the file to encrypted
 //return number of bytes read
 int read_encrypted(char *filename, int *encrypted) {
-    int fil = open(filename, O_RDONLY);
-    if (fil < 0) exit(-1); // can't read file so leave
-
-    int l = read(fil, encrypted, MAX * sizeof(int));
-    close(fil);
-    return l / sizeof(int);
+    FILE *filepointer;
+    filepointer = fopen(filename, "rb");
+    if (filepointer == NULL) printf("no\n"), exit(-1);
+    int bytes = fread(encrypted, sizeof(int), MAX, filepointer);
+    fclose(filepointer);
+    return bytes;
 }
 
 //Do not change the main() function
@@ -148,18 +138,6 @@ int main(int argc, char *argv[])
 	char message[MAX];
 	strcpy(message, "");
 	search(encrypted, len, message);
-	//printf("%s\n", message);
-    for (int i = 0; message[i] != '\0'; i++) {
-        if (i < len-5 && message[i+5] == ' ' && message[i+4] == ' ' && message[i+3] == ' ' && message[i+2] == ' ' && message[i+1] == ' ' && message[i] == ' ') {
-            printf("—");
-            i += 6;
-        }
-        if (i < len-2 && message[i+2] == ' ' && message[i+1] == ' ' && message[i] == ' ') {
-            printf("’");
-            i += 3;
-        }
-        printf("%c", message[i]);
-    }
-    printf("\n");
+	printf("%s\n", message);
 	return 0;
 }

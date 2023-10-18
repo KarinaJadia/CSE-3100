@@ -62,7 +62,7 @@ int in_dict(const char *word) {
 //The result is in decrypted
 
 void decryption(unsigned char key, unsigned char shift, const int *encrypted, int len, char *decrypted) {
-    for(int i = 0; i<(len); i++) decrypted[i] = (encrypted[i] ^ key) >> shift;
+    for(int i = 0; i < len; i++) decrypted[i] = (encrypted[i] ^ key) >> shift;
 	decrypted[len] = '\0';
 
 }

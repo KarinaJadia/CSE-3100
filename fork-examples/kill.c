@@ -26,14 +26,16 @@ int main() {
         printf("in parent\n");
 
         if (kill(value, SIGTERM) == -1) perror("kill failed"), exit(1); // send SIGTERM (termination) to child
+            // generally sigterm is automatically defined and represents the termination signal
 
         int status;
         if (waitpid(value, &status, 0) == -1) perror("wait failed"), exit(1); // wait for child to complete and check status
+            // this is also where status gets updated
 
         if (WIFSIGNALED(status)) printf("child process terminated by signal %d\n", WTERMSIG(status)); // if kill succesful
 
         printf("parent done\n");
     }
-    
+
     return 0;
 }

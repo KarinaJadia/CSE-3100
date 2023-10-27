@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
 int main() {
     pid_t value; // initializes value of process ID (which tells you which process you're in)
     int status;

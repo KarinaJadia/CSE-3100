@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -19,8 +20,13 @@ static void *thread_main(void *p_arg) {
     thread_arg_t *data = (thread_arg_t *)p_arg;
     unsigned int mid = data->m->nrows / 2;
 
-    if (data->id == 1) data->start = 0, data->end = mid;
-    else data->start = mid, data->end = data->m->nrows;
+    if (data->id == 1) {
+        data->start = 0;
+        data->end = mid;
+    } else {
+        data->start = mid;
+        data->end = data->m->nrows;
+    }
 
     for (unsigned int i = data->start; i < data->end; i++) {
         for (unsigned int j = 0; j < data->m->ncols; j++) {
@@ -56,16 +62,12 @@ TMatrix *addMatrix_thread(TMatrix *m, TMatrix *n) {
         dataThread[i].n = n;
         dataThread[i].t = t;
 
-        if (pthread_create(&threads[i], NULL, thread_main, &dataThread[i]) != 0) {
-            for (unsigned int j = 0; j < i; j++) {
-                pthread_cancel(threads[j]);
-            }
-            return NULL;
-        }
+        pthread_create(&threads[i], NULL, thread_main, &dataThread[i]);
     }
 
     for (unsigned int i = 0; i < NUM_THREADS; i++) {
-        if (pthread_join(threads[i], NULL) != 0) return NULL;
+        pthread_join(threads[i], NULL);
     }
+    
     return t;
 }

@@ -113,17 +113,30 @@ void* thread_consume(void* threadarg)
 void* thread_produce(void* threadarg)
 {   
 	struct thread_data* my_data = (struct thread_data*) threadarg;
-        list_t *p = my_data->p;
-        pthread_barrier_t *p_barrier = my_data->p_barrier;
-        pthread_barrier_wait(p_barrier);
-	two_d_buffer *q = my_data->q;
+    list_t *p = my_data->p;
+    pthread_barrier_t *p_barrier = my_data->p_barrier;
+    pthread_barrier_wait(p_barrier);
+    two_d_buffer *q = my_data->q;
 
 	int done = 0;
 	while(!done)
 	{
 		//TODO
 		//fill in code below
+		pthread_mutex_lock(&p->mutex);
+		if (p->head != NULL) {
+			node *las = remove_first(&p->head, &p->tail);
+			pthread_mutex_unlock(&p->mutex);
+			prepare(las->v);
+			add_to_buffer(las->v, las->v, q);
+			my_data->total+=1;
+			free(las);
 
+		} else {
+			free_all(&p->head, &p->tail);
+			done = 1;
+			pthread_mutex_unlock(&p->mutex);
+		}
 
 	}
 	 
@@ -176,41 +189,42 @@ int main(int argc, char *argv[])
 		//TODO
 		//complete the following line of code
 
-		rc = pthread_create(&threads[t], NULL,  , &thread_data_array[t]);
-        	if (rc) {
-                printf("ERROR; return code from pthread_create() is %d\n", rc);
-                exit(-1);
-        	}
-    	}
+		rc = pthread_create(&threads[t], NULL, thread_consume, &thread_data_array[t]);
+		if (rc) {
+			printf("ERROR; return code from pthread_create() is %d\n", rc);
+			exit(-1);
+		}
+    }
 
-        for(t=0; t<n_producer; t++ ) {
-            thread_data_array[n_consumer + t].id = t;
-            thread_data_array[n_consumer + t].p = p;
-            thread_data_array[n_consumer + t].q = q;
-            thread_data_array[n_consumer + t].total = 0;
-            thread_data_array[n_consumer + t].p_barrier = &barrier;
-            //TODO
-            //complete the follow line of code
-            rc = pthread_create(&threads[n_consumer + t], NULL, , &thread_data_array[n_consumer + t]);
-            if (rc) {
-                printf("ERROR; return code from pthread_create() is %d\n", rc);
-                exit(-1);
-            }
-        }
+	for(t=0; t<n_producer; t++ ) {
+		thread_data_array[n_consumer + t].id = t;
+		thread_data_array[n_consumer + t].p = p;
+		thread_data_array[n_consumer + t].q = q;
+		thread_data_array[n_consumer + t].total = 0;
+		thread_data_array[n_consumer + t].p_barrier = &barrier;
+		//TODO
+		//complete the follow line of code
+		rc = pthread_create(&threads[n_consumer + t], NULL, thread_produce, &thread_data_array[n_consumer + t]);
+		if (rc) {
+			printf("ERROR; return code from pthread_create() is %d\n", rc);
+			exit(-1);
+		}
+	}
 
-    	for(t=0; t<n_consumer + n_producer; t++ ) 
-    	{
-        	rc = pthread_join( threads[t], NULL );
-        	if( rc ){
-            	printf("ERROR; return code from pthread_join() is %d\n", rc);
-            	exit(-1);
-        	}
-    	}
+	for(t=0; t<n_consumer + n_producer; t++ ) 
+	{
+		rc = pthread_join( threads[t], NULL );
+		if( rc ){
+			printf("ERROR; return code from pthread_join() is %d\n", rc);
+			exit(-1);
+		}
+	}
 
 	int total = 0;
 	//TODO
 	//fill in code below
 	
+	for (int i = 0; i < n_consumer +n_producer; i++) total += thread_data_array[i].total;
 
 	printf("total = %d\n", total);
  

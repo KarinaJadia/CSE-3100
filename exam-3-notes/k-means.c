@@ -39,12 +39,13 @@ void check_pthread_return(int rv, char *msg) {
 
 // generates random samples
 void generate_samples(double x, double y, double r, point_t a[], int n)
-{ 
+{
     for(int i = 0; i < n; i++) {
         double radius = ((float)rand()/(float)(RAND_MAX))*r;
         double theta = 2*M_PI*((float)rand()/(float)(RAND_MAX));
-        a[i].x = x + radius*cos(theta);
-        a[i].y = y + radius*sin(theta);
+        // TOFIX (won't recognize cos and sin for some reason)
+        a[i].x = x + radius*cos(theta); // cos
+        a[i].y = y + radius*sin(theta); // sin
     }
 }
 
@@ -200,17 +201,14 @@ void* thread_main(void* thread_arg) {
         centroids[j].y = a[idx].y;
     }
 
-    // thread
+    // centroid computation
     for (int l = 0; l < rounds; l++) {
         compute_labels(centroids, k, a, m, labels);
         compute_centroids(centroids, k, a, m, labels);
     }
-
-    // calculate the squared intra-cluster distance for this thread's result
-    p_squared_intra_cluster_dist[id] = squared_intra_cluster_dist(centroids, k, a, m, labels);
-
-    // free memory (please no core dump)
-    free(labels);
+    
+    p_squared_intra_cluster_dist[id] = squared_intra_cluster_dist(centroids, k, a, m, labels); // i think i'm getting the segmentation/code dump error from here according to gradescope but idk why??
+    free(labels); // did this and still getting a core dump :(((
 
     pthread_exit(NULL);
 }
@@ -250,7 +248,7 @@ int main(int argc, char *argv[])
 
     // Set up thread arguments
     for(int i = 0; i < n_threads; i++) {
-	   thread_args[i].id = i;
+	    thread_args[i].id = i;
         thread_args[i].k = k;
         thread_args[i].m = m;
         thread_args[i].a = a;
@@ -264,7 +262,6 @@ int main(int argc, char *argv[])
         rv = pthread_create(&thread_arr[i], NULL, thread_main, &thread_args[i]);
         check_pthread_return(rv, "pthread_create");
     }
-
 
     // TODO: Join with the threads
     for (int i = 0; i < n_threads; i++) {

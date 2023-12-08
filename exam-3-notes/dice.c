@@ -70,7 +70,6 @@ void *producer(void *t)
             for (int i = 1; i < NUM_CONSUMERS + 1; i++) {
                 pthread_cond_signal(&pdata->cond[i]);
             }
-
             // unlocks mutex
             pthread_mutex_unlock(&pdata->mutex);
         }
@@ -100,13 +99,9 @@ void * consumer(void *t)
             pthread_cond_wait(&pdata->cond[id], &pdata->mutex);
         }
 
-
         // checks if there's data
-        if (pdata->n > 0) {
-            p_count[id]++;
-        } else {
-            done = 1;
-        }
+        if (pdata->n > 0) p_count[id]++;
+        else done = 1;
 
         // signals producer
         pdata->ready = 0;
@@ -114,6 +109,7 @@ void * consumer(void *t)
 
         // unlocks mutex
         pthread_mutex_unlock(&pdata->mutex);
+        
     }
     pthread_exit(NULL);
 }
